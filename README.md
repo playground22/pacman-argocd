@@ -1,4 +1,4 @@
-# pacman-argocd
+# Pacman app deploy
 
 In this repo we will create a kubernetes cluster with minikube and deploy an app in the cluster.
 The first part, "Deploy pacman app manually", show the deployment of the app amnually.
