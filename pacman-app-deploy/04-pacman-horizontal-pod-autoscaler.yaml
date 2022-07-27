@@ -15,5 +15,5 @@ spec:
         averageUtilization: 1
         type: Utilization
     type: Resource
-  minReplicas: 2
+  minReplicas: 1
   maxReplicas: 10
