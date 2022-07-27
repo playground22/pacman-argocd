@@ -1,7 +1,10 @@
 # pacman-argocd
 
+In this repo we will create a kubernetes cluster with minikube and deploy an app in the cluster.
+The first part, "Deploy pacman app manually", show the deployment of the app amnually.
+The second part, "Deploy pacman app with argocd", show how to deploy the app with arogcd.
 
-# Deploy minikube kubernetes cluster
+# Deploy pacman app manually
 
 1 - Create minikube cluster with name pacman and with flag to monitorize CPU utilization
 $ minikube start --extra-config=kubelet.housekeeping-interval=10s -p pacman
@@ -23,31 +26,31 @@ $ minikube addons list -p pacman
 # Deploy pacman app
 
 5 - Create a namespace dedicated to pacman app:
-$ kubectl apply -f pacman-app-manual-deploy/01-pacman-namespace.yaml
+$ kubectl apply -f pacman-app-deploy/01-pacman-namespace.yaml
 :: Confirm the namespace is created:
 $ kubectl get namespaces
 
 
 6 - Create a deployment with pacman app:
-$ kubectl apply -f pacman-app-manual-deploy/02-pacman-deployment.yaml
+$ kubectl apply -f pacman-app-deploy/02-pacman-deployment.yaml
 :: Confirm the deployment is created:
 $ kubectl get deployments -n pacman-namespace -o wide
 :: Confirm the pods from the deployment have been created:
 $ kubectl get pods -n pacman-namespace -o wide
 
 7 - Create a service type ClusterIP for the pods from the deployment:
-$ kubectl apply -f pacman-app-manual-deploy/03-pacman-clusterip-service.yaml
+$ kubectl apply -f pacman-app-deploy/03-pacman-clusterip-service.yaml
 :: Confirm the service is created:
 $ kubectl get services -n pacman-namespace -o wide
 
 8 - Create an ingress (that will be consumed by the minikune ingress controller, "ingress") to the service we've just created:
-$ kubectl apply -f pacman-app-manual-deploy/04-pacman-ingress.yaml
+$ kubectl apply -f pacman-app-deploy/04-pacman-ingress.yaml
 :: Confirm the ingress is created (it takes about a minute to display the ADDRESS of the ingress):
 $ kubectl get ingress -n pacman-namespace -o wide
 :: Now, it should be possible to access the app in the browser. Remmeber to add to your host file the IP from the ingress along with the name "pacman.local".
 
 9 - Create a Horizontal Pod Autoscaling (HPA) for the pacman app (it takes about a minute to have the HPA enabled):
-$ kubectl apply -f pacman-app-manual-deploy/05-horizontal-pod-autoscaler.yaml
+$ kubectl apply -f pacman-app-deploy/05-horizontal-pod-autoscaler.yaml
 :: Confirm the ingress is created:
 $ kubectl get hpa -n pacman-namespace -o wide
 
