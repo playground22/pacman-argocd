@@ -6,7 +6,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: pacman-namespace
+  #namespace: pacman-namespace
   name: pacman-deployment
   labels:
     app: pacman

@@ -10,7 +10,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: pacman-hpa
-  namespace: pacman-namespace
+  #namespace: pacman-namespace
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

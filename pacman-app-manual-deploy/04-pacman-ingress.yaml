@@ -4,7 +4,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  namespace: pacman-namespace
+  #namespace: pacman-namespace
   name: pacman-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
