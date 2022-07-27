@@ -1,0 +1,6 @@
+# https://argo-cd.readthedocs.io/en/stable/getting_started/#1-install-argo-cd
+# Cretae argocd namespace:
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd-namespace
