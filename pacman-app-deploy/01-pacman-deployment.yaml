@@ -1,12 +1,7 @@
 # Create deployment:
-# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
-# To understand resources requests and limits:
-# https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  #namespace: pacman-namespace
   name: pacman-deployment
   labels:
     app: pacman
