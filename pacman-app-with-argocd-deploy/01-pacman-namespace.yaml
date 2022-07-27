@@ -1,0 +1,7 @@
+# Create namespace:
+# https://kubernetes.io/docs/tasks/administer-cluster/namespaces/
+# https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pacman-namespace

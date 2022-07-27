@@ -1,0 +1,32 @@
+# Create deployment:
+# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+# To understand resources requests and limits:
+# https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: pacman-namespace
+  name: pacman-deployment
+  labels:
+    app: pacman
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pacman
+  template:
+    metadata:
+      labels:
+        app: pacman
+    spec:
+      containers:
+      - name: pacman
+        image: ghcr.io/playground22/pacman:2.0
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 200m
+          limits:
+            cpu: 500m

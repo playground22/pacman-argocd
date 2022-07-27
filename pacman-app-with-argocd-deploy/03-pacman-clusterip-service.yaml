@@ -1,0 +1,15 @@
+# Create service type ClusterIP:
+# https://medium.com/the-programmer/working-with-clusterip-service-type-in-kubernetes-45f2c01a89c8
+# https://cloud.google.com/kubernetes-engine/docs/how-to/exposing-apps
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: pacman-namespace
+  name: pacman-clusterip-service
+spec:
+  type: ClusterIP
+  selector:
+    app: pacman
+  ports:
+    - port: 80
+      targetPort: 80

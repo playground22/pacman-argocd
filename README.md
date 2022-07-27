@@ -86,12 +86,12 @@ $ minikube addons enable ingress -p pacman
 $ minikube addons list -p pacman
 
 6 - Create a namespace dedicated to argocd:
-$ kubectl apply -f pacman-app-argocd-deploy/01-argocd-namespace.yaml
+$ kubectl apply -f argocd-deploy/01-argocd-namespace.yaml
 :: Confirm the namespace is created:
 $ kubectl get namespaces
 
 7 - Install argocd:
-$ kubectl apply -f pacman-app-argocd-deploy/02-argocd-install.yaml -n argocd-namespace
+$ kubectl apply -f argocd-deploy/02-argocd-install.yaml -n argocd-namespace
 :: Confirm the deployment is created:
 $ kubectl get deployments -n argocd-namespace -o wide
 :: Confirm the pods from the deployment have been created:
@@ -121,4 +121,9 @@ echo -n "N3M1eGFEVEtJUVdHRFItNg==" | base64 -d
 
 9 - Acess the argocd UI:
 $ kubectl port-forward service/argocd-server -n argocd-namespace 8080:443
-:: Now, we can go to the browser an access "https://localhost:8080" (ignore the certificate error) and login into argo cd as "admin" and the passowrd from the step aboce.
+:: Now, we can go to the browser an access "https://localhost:8080" (ignore the certificate error) and login into argo cd as "admin" and the passowrd from the step above.
+
+10 - Deploy the app via argocd! In the folder images, we can see a picture of how to fill the "New App" form.
+The following URL should also help to understand what is happening here:
+https://codefresh.io/blog/getting-started-with-gitops-and-argo-cd/
+
