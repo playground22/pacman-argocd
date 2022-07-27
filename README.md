@@ -13,7 +13,7 @@ $ minikube start --extra-config=kubelet.housekeeping-interval=10s -p pacman
 Note: 
 "The -extra-config=kubelet.housekeeping-interval=10s switch enables showing the CPU utilization metrics in the dashboard" 
 https://adamtheautomator.com/minikube-dashboard/ 
-:: When the process finishs, to confirm the cluster is running, the following command can be used: 
+:: When the process finishes, to confirm the cluster is running, the following command can be used: 
 $ kubectl get nodes 
 
 2 - Enable metrics addon: 
@@ -33,15 +33,15 @@ $ kubectl apply -f argocd-deploy/01-argocd-namespace.yaml
 $ kubectl get namespaces 
 
 6 - Install Argo CD: 
-$ kubectl apply -f argocd-deploy/02-argocd-install.yaml -n argocd-namespace 
+$ kubectl apply -f argocd-deploy/02-argocd-install.yaml -n argocd 
 :: Confirm the deployment is created: 
-$ kubectl get deployments -n argocd-namespace -o wide 
+$ kubectl get deployments -n argocd -o wide 
 :: Confirm the pods from the deployment have been created: 
-$ kubectl get pods -n argocd-namespace -o wide 
+$ kubectl get pods -n argocd -o wide 
 Note: more "kubectl get" commands can be tested, because this installation has a lot of resources. Examples: 
-$ kubectl get services -n argocd-namespace -o wide 
-$ kubectl get clusterrole -n argocd-namespace -o wide 
-$ kubectl get clusterrolebinding -n argocd-namespace -o wide 
+$ kubectl get services -n argocd -o wide 
+$ kubectl get clusterrole -n argocd -o wide 
+$ kubectl get clusterrolebinding -n argocd -o wide 
 $ (...) 
 
 Note: This manifest is copied from https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml 
@@ -49,17 +49,47 @@ So, it is the same to issue the install command as: kubectl apply -f https://raw
 
 7 - Get the password generated to login: 
 :: List all the secrets: 
-$ kubectl get secrets -n argocd-namespace -o wide 
+$ kubectl get secrets -n argocd -o wide 
 :: Get the value for the "argocd-initial-admin-secret" secrets 
-$ kubectl get secret argocd-initial-admin-secret -n argocd-namespace -o yaml 
+$ kubectl get secret argocd-initial-admin-secret -n argocd -o yaml 
 :: Since the field "password" is base64 coded, we need to decode it. To do so, use the following command: 
 echo -n "PASTE-HERE-THE-PASSWORD-VALUE" | base64 -d 
 
+
 8 - Acess the Argo CD UI: 
-$ kubectl port-forward service/argocd-server -n argocd-namespace 8080:443 
+$ kubectl port-forward service/argocd-server -n argocd 8080:443 
 :: Now, we can go to the browser an access "https://localhost:8080" (ignore the certificate error) and login into argo cd as "admin" and the passowrd from the step above. 
 
-9 - Deploy the app via Argo CD! In the folder images, we can see a picture of how to fill the "New App" form. 
-The following URL should also help to understand what is happening here: 
+9 - Deploy the app via Argo CD! In the folder "pics", we can see several pictures, since deploying the app to configurations.
+The following URL should also help to understand how to deploy an app: 
 https://codefresh.io/blog/getting-started-with-gitops-and-argo-cd/ 
 
+Nevertheless! Here's a description of what we filled in the form:
+GENERAL:
+Application name: pacman
+Project name: default
+
+SYNC POLICY:
+Automatic
+(selected) PRUNE RESOURCES
+(selected) SELF HEAL
+(selected) AUTO-CREATE NAMESPACE
+
+Notes: In this block we are saying that, the app will sync with commits to the git repository, delete "things" that are note in the repository and force the state of the app to what is defined in the repository.
+Also, the app will be in a namespace managed by Argo CD, that will be automatically created in the resources
+
+SOURCE
+Repository URL: "Your repository URL"
+Revision: HEAD
+Path: Location (folder) of the yaml files with the specs of the resources used by the app
+
+Notes: You need to guarantee that the repository is public, or, in case of private, assign credentials for Argo CD to authenticate (Argo CD Settings > Repositories)
+
+DESTINATION
+Cluster URL: https://kubenetes.defautl.svc
+Namespace: pacman-argo
+
+Notes: When deploying internally (i.e. to the same cluster that Argo CD is running in), the https://kubernetes.default.svc hostname should be used as the application’s Kubernetes API server address.
+The namespace, is the name for the namespace that Argo CD will create automatically (as stated in the steps above)
+
+After this, just press the button "Create" and the app will be automatically deployed to the cluster.
