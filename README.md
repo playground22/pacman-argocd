@@ -64,32 +64,46 @@ $ kubectl port-forward service/argocd-server -n argocd 8080:443
 The following URL should also help to understand how to deploy an app: 
 https://codefresh.io/blog/getting-started-with-gitops-and-argo-cd/ 
 
-Nevertheless! Here's a description of what we filled in the form:
-GENERAL:
-Application name: pacman
-Project name: default
+Nevertheless! Here's a description of what we filled in the form: 
+GENERAL: 
+Application name: pacman 
+Project name: default 
 
-SYNC POLICY:
-Automatic
-(selected) PRUNE RESOURCES
-(selected) SELF HEAL
-(selected) AUTO-CREATE NAMESPACE
+SYNC POLICY: 
+Automatic 
+(selected) PRUNE RESOURCES 
+(selected) SELF HEAL 
+(selected) AUTO-CREATE NAMESPACE 
 
-Notes: In this block we are saying that, the app will sync with commits to the git repository, delete "things" that are note in the repository and force the state of the app to what is defined in the repository.
-Also, the app will be in a namespace managed by Argo CD, that will be automatically created in the resources
+Notes: In this block we are saying that, the app will sync with commits to the git repository, delete "things" that are note in the repository and force the state of the app to what is defined in the repository. 
+Also, the app will be in a namespace managed by Argo CD, that will be automatically created in the resources. 
 
-SOURCE
-Repository URL: "Your repository URL"
-Revision: HEAD
-Path: Location (folder) of the yaml files with the specs of the resources used by the app
+SOURCE 
+Repository URL: "Your repository URL" 
+Revision: HEAD 
+Path: Location (folder) of the yaml files with the specs of the resources used by the app 
 
-Notes: You need to guarantee that the repository is public, or, in case of private, assign credentials for Argo CD to authenticate (Argo CD Settings > Repositories)
+Notes: You need to guarantee that the repository is public, or, in case of private, assign credentials for Argo CD to authenticate (Argo CD Settings > Repositories) 
 
-DESTINATION
-Cluster URL: https://kubenetes.defautl.svc
-Namespace: pacman-argo
+DESTINATION 
+Cluster URL: https://kubenetes.defautl.svc 
+Namespace: pacman-argo 
 
-Notes: When deploying internally (i.e. to the same cluster that Argo CD is running in), the https://kubernetes.default.svc hostname should be used as the application’s Kubernetes API server address.
-The namespace, is the name for the namespace that Argo CD will create automatically (as stated in the steps above)
+Notes: When deploying internally (i.e. to the same cluster that Argo CD is running in), the https://kubernetes.default.svc hostname should be used as the application’s Kubernetes API server address. 
+The namespace, is the name for the namespace that Argo CD will create automatically (as stated in the steps above). 
 
-After this, just press the button "Create" and the app will be automatically deployed to the cluster.
+After this, just press the button "Create" and the app will be automatically deployed to the cluster. 
+
+10 - After having the app running and healthy, we can export it configuration to a yaml manifest, and then, treat it as any other manifest and deploy it!
+using kubectl apply -f ARGOCD-APP-FILE.yaml. 
+
+To do so, use the command: 
+kubectl get application APLICATION-NAME -o yaml -n argocd > app.yaml 
+Example, according to the app we've deployed: 
+$ kubectl get application pacman -o yaml -n argocd > app.yaml 
+Then, just remove the unnecessary lines (take a look at the file i the repository root "argocd-exported-app.yaml"). 
+
+To test, just delete the app in the UI (remember that all the resources will be deleted) and then: 
+$ kubectl apply -f argocd-exported-app.yaml 
+
+Wit this, the app will be deployed again, and will have the same configurations as the ones done manually! 
